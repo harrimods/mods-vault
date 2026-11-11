@@ -1,1 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HarriPotter's Mod Vault — Lua Cheat Scripts for GTA SA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d9a441;
+            --gold-soft: #e8c07a;
+            --lua: #5b8dd6;
+            --warn: #e0a13a;
+            --warn-bg: rgba(224,161,58,0.07);
+            --warn-line: rgba(224,161,58,0.35);
+            --ink: #0b0b0b;
+            --panel: #131313;
+            --line: #232323;
+            --muted: #8a8a8a;
+            --text: #e8e6e1;
+        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--ink);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.035;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+        /* ---- Top disclaimer bar ---- */
+        .topbar {
+            background: var(--warn-bg);
+            border-bottom: 1px solid var(--warn-line);
+            font-size: 0.76rem;
+            letter-spacing: 0.4px;
+            color: var(--warn);
+            text-align: center;
+            padding: 9px 20px;
+            font-weight: 500;
+        }
+        .topbar strong { color: var(--gold-soft); }
+
+        /* ---- Header ---- */
+        .site-head {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(14px);
+            background: rgba(11,11,11,0.72);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .head-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 74px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.65rem;
+            letter-spacing: 2px;
+        }
+
+        .brand .harri { color: var(--text); }
+        .brand .vault { color: var(--gold); }
+        .brand .mark {
+            display: inline-block;
+            width: 6px; height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            margin-left: 4px;
+            transform: translateY(-4px);
+        }
+
+        .nav { display: flex; gap: 30px; }
+        .nav a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.86rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 4px;
+            transition: color 0.25s;
+        }
+        .nav a::after {
+            content: "";
+            position: absolute;
+            left: 0; bottom: 0;
+            width: 0; height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .nav a:hover { color: var(--text); }
+        .nav a:hover::after { width: 100%; }
+
+        /* ---- Hero ---- */
+        .hero {
+            position: relative;
+            padding: 120px 0 100px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .hero::after {
+            content: ".lua";
+            position: absolute;
+            right: -10px;
+            top: 60px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            font-size: 11rem;
+            color: rgba(91,141,214,0.05);
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.74rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 26px;
+        }
+        .eyebrow::before {
+            content: "";
+            width: 34px; height: 1px;
+            background: var(--gold);
+        }
+
+        .hero h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 7vw, 5.6rem);
+            line-height: 0.96;
+            letter-spacing: 1px;
+            font-weight: 400;
+            max-width: 16ch;
+        }
+
+        .hero h1 em { font-style: normal; color: var(--gold); }
+
+        .hero .sub {
+            margin: 28px 0 40px;
+            max-width: 48ch;
+            color: var(--muted);
+            font-size: 1.05rem;
+            font-weight: 300;
+        }
+
+        .hero .sub code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            color: var(--lua);
+            background: rgba(91,141,214,0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .cta-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+
+        .btn {
+            display: inline-block;
+            font-size: 0.82rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-solid { background: var(--gold); color: #0b0b0b; }
+        .btn-solid:hover { background: var(--gold-soft); transform: translateY(-2px); }
+
+        .btn-ghost { color: var(--text); border: 1px solid var(--line); background: transparent; }
+        .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+        /* ---- WARNING SECTION ---- */
+        .warning { padding: 70px 0 80px; border-bottom: 1px solid var(--line); }
+
+        .warn-box {
+            position: relative;
+            background: linear-gradient(180deg, rgba(224,161,58,0.06) 0%, rgba(224,161,58,0.02) 100%);
+            border: 1px solid var(--warn-line);
+            border-left: 4px solid var(--warn);
+            border-radius: 4px;
+            padding: 42px 46px;
+            overflow: hidden;
+        }
+
+        .warn-box::before {
+            content: "!";
+            position: absolute;
+            right: 30px;
+            top: -20px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 15rem;
+            line-height: 1;
+            color: rgba(224,161,58,0.06);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .warn-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.74rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--warn);
+            font-weight: 500;
+            margin-bottom: 22px;
+        }
+
+        .warn-label .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--warn);
+            box-shadow: 0 0 0 0 rgba(224,161,58,0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(224,161,58,0.45); }
+            70% { box-shadow: 0 0 0 10px rgba(224,161,58,0); }
+            100% { box-shadow: 0 0 0 0 rgba(224,161,58,0); }
+        }
+
+        .warn-box h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.9rem, 4vw, 2.7rem);
+            letter-spacing: 1.5px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            color: var(--text);
+        }
+        .warn-box h2 span { color: var(--warn); }
+
+        .warn-box p {
+            color: #b8b2a6;
+            font-weight: 300;
+            font-size: 0.98rem;
+            margin-bottom: 16px;
+            max-width: 78ch;
+        }
+
+        .warn-box p strong { color: var(--gold-soft); font-weight: 600; }
+
+        .warn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1px;
+            background: var(--warn-line);
+            border: 1px solid var(--warn-line);
+            margin-top: 32px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .warn-grid .cell { background: rgba(11,11,11,0.6); padding: 22px 24px; }
+
+        .warn-grid .cell .k {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--warn);
+            margin-bottom: 8px;
+        }
+
+        .warn-grid .cell .v { font-size: 0.9rem; color: #b8b2a6; font-weight: 300; }
+
+        .warn-foot {
+            margin-top: 30px;
+            padding-top: 24px;
+            border-top: 1px dashed var(--warn-line);
+            font-size: 0.86rem;
+            color: var(--muted);
+            font-weight: 300;
+        }
+        .warn-foot strong { color: var(--warn); }
+
+        /* ---- Section scaffolding ---- */
+        section { padding: 100px 0; }
+
+        .sec-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 54px;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .sec-head h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 4vw, 2.9rem);
+            letter-spacing: 1.5px;
+            font-weight: 400;
+        }
+        .sec-head h2 span { color: var(--gold); }
+
+        .sec-head p {
+            color: var(--muted);
+            font-size: 0.92rem;
+            max-width: 36ch;
+            text-align: right;
+        }
+
+        /* ---- Script cards ---- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 1px;
+            background: var(--line);
+            border: 1px solid var(--line);
+        }
+
+        .item {
+            background: var(--panel);
+            padding: 34px 30px 30px;
+            position: relative;
+            transition: background 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .item:hover { background: #181818; }
+
+        .item .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .item .no {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            color: var(--gold);
+        }
+
+        .item .file {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--lua);
+            background: rgba(91,141,214,0.1);
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        .item h3 { font-size: 1.18rem; font-weight: 600; margin-bottom: 12px; line-height: 1.3; }
+
+        .item p { color: var(--muted); font-size: 0.9rem; font-weight: 300; margin-bottom: 26px; flex: 1; }
+
+        .item .foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--line);
+            padding-top: 20px;
+        }
+
+        .price { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 1px; color: var(--text); }
+
+        .get {
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .get::after { content: "→"; transition: transform 0.25s; }
+        .get:hover::after { transform: translateX(4px); }
+
+        /* ---- Marquee strip ---- */
+        .strip {
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            background: #0e0e0e;
+            overflow: hidden;
+            padding: 22px 0;
+        }
+        .marquee {
+            display: flex;
+            gap: 60px;
+            white-space: nowrap;
+            animation: slide 26s linear infinite;
+            width: max-content;
+        }
+        .marquee span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: #3a3a3a;
+        }
+        .marquee span b { color: var(--gold); font-weight: 400; }
+        @keyframes slide {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ---- Lua snippet block ---- */
+        .snippet-section { border-bottom: 1px solid var(--line); background: #0e0e0e; }
+
+        .snippet {
+            background: #090909;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            overflow: hidden;
+            max-width: 720px;
+        }
+
+        .snippet-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--line);
+            background: #111;
+        }
+        .snippet-bar i { width: 10px; height: 10px; border-radius: 50%; background: #2a2a2a; }
+        .snippet-bar i:nth-child(1) { background: #4a3a2a; }
+        .snippet-bar i:nth-child(2) { background: #3a3a2a; }
+        .snippet-bar i:nth-child(3) { background: #2a3a2a; }
+        .snippet-bar .fname {
+            margin-left: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .snippet pre {
+            padding: 24px 22px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.8;
+            color: #c9c5bd;
+            overflow-x: auto;
+        }
+        .snippet .kw { color: #c586c0; }
+        .snippet .fn { color: #dcdcaa; }
+        .snippet .str { color: #ce9178; }
+        .snippet .num { color: #b5cea8; }
+        .snippet .cm { color: #5a5a5a; font-style: italic; }
+
+        .snippet-copy {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .snippet-copy h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 4vw, 2.9rem);
+            letter-spacing: 1.5px;
+            font-weight: 400;
+            margin-bottom: 22px;
+        }
+        .snippet-copy h2 span { color: var(--gold); }
+        .snippet-copy p { color: var(--muted); font-weight: 300; margin-bottom: 16px; }
+
+        /* ---- REQUEST SECTION ---- */
+        .request {
+            border-bottom: 1px solid var(--line);
+            background: #0e0e0e;
+        }
+
+        .request-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .request-intro h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 4vw, 2.9rem);
+            letter-spacing: 1.5px;
+            font-weight: 400;
+            margin-bottom: 22px;
+        }
+        .request-intro h2 span { color: var(--gold); }
+        .request-intro p {
+            color: var(--muted);
+            font-weight: 300;
+            margin-bottom: 16px;
+            max-width: 44ch;
+        }
+        .request-intro .note {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--lua);
+            background: rgba(91,141,214,0.1);
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-top: 22px;
+            line-height: 1.6;
+        }
+
+        .req-form {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 34px;
+        }
+
+        .field { margin-bottom: 20px; }
+        .field label {
+            display: block;
+            font-size: 0.74rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            background: #0b0b0b;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            padding: 13px 15px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus { border-color: var(--gold); }
+
+        .field textarea { resize: vertical; min-height: 120px; }
+
+        .field select { cursor: pointer; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .req-form .btn { width: 100%; margin-top: 6px; }
+
+        .form-note {
+            font-size: 0.74rem;
+            color: #555;
+            margin-top: 14px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* ---- About / signature ---- */
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+
+        .about h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 4vw, 2.9rem);
+            letter-spacing: 1.5px;
+            font-weight: 400;
+            margin-bottom: 24px;
+        }
+        .about h2 span { color: var(--gold); }
+
+        .about p { color: var(--muted); font-weight: 300; margin-bottom: 18px; }
+
+        .signature {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-top: 30px;
+        }
+
+        .about-stat { border-left: 1px solid var(--line); padding-left: 40px; }
+        .about-stat .row { padding: 22px 0; border-bottom: 1px solid var(--line); }
+        .about-stat .row:last-child { border-bottom: none; }
+        .about-stat .num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.6rem;
+            color: var(--gold);
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+        .about-stat .lbl {
+            font-size: 0.82rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        /* ---- Footer ---- */
+        .site-foot { border-top: 1px solid var(--line); padding: 60px 0 40px; background: #090909; }
+        .foot-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        .foot-brand {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+        .foot-brand span { color: var(--gold); }
+        .foot-brand small {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            color: var(--muted);
+            margin-top: 10px;
+            font-weight: 300;
+        }
+        .foot-links { display: flex; gap: 46px; flex-wrap: wrap; }
+        .foot-links a {
+            display: block;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.86rem;
+            margin-bottom: 10px;
+            transition: color 0.2s;
+        }
+        .foot-links a:hover { color: var(--gold); }
+        .foot-links .h {
+            color: var(--text);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+        .foot-bottom {
+            border-top: 1px solid var(--line);
+            padding-top: 26px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            color: #555;
+            font-size: 0.8rem;
+        }
+        .foot-bottom .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .foot-disclaimer {
+            margin-top: 22px;
+            font-size: 0.74rem;
+            color: #4a4a4a;
+            line-height: 1.7;
+            max-width: 80ch;
+        }
+
+        @media (max-width: 760px) {
+            .nav { display: none; }
+            .about, .snippet-copy, .request-grid { grid-template-columns: 1fr; gap: 44px; }
+            .about-stat { border-left: none; border-top: 1px solid var(--line); padding-left: 0; padding-top: 30px; }
+            .sec-head p { text-align: left; }
+            .hero { padding: 80px 0 70px; }
+            .hero::after { font-size: 6rem; top: 30px; }
+            section { padding: 70px 0; }
+            .wrap { padding: 0 22px; }
+            .warn-box { padding: 32px 26px; }
+            .form-row { grid-template-columns: 1fr; }
+            .req-form { padding: 26px 22px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        ⚠ <strong>Heads up:</strong> Cheat scripts are use-at-your-own-risk. Using them on servers you don't own can get you banned. Read the full warning below.
+    </div>
+
+    <header class="site-head">
+        <div class="wrap head-inner">
+            <div class="brand">
+                <span class="harri">HARRIPOTTER'S</span>
+                <span class="vault">MOD VAULT</span>
+                <span class="mark"></span>
+            </div>
+            <nav class="nav">
+                <a href="#warning">Warning</a>
+                <a href="#vault">The Vault</a>
+                <a href="#code">The Code</a>
+                <a href="#request">Request</a>
+                <a href="#story">Story</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="wrap">
+            <div class="eyebrow">Lua Cheat Scripts · MoonLoader · GTA SA</div>
+            <h1>Cheat scripts for<br><em>people who break the rules.</em></h1>
+            <p class="sub">Every <code>.lua</code> in the Vault is hand-written, tested on real MoonLoader builds, and stripped of junk before it ships. Drop it in, load it, play — no broken dependencies, no spaghetti code.</p>
+            <div class="cta-row">
+                <a href="#vault" class="btn btn-solid">Open the Vault</a>
+                <a href="#request" class="btn btn-ghost">Request a hack</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WARNING SECTION ===== -->
+    <section class="warning" id="warning">
+        <div class="wrap">
+            <div class="warn-box">
+                <div class="warn-label"><span class="dot"></span> Read before you buy</div>
+                <h2>This is <span>not legal action</span> — and I mean that honestly.</h2>
+
+                <p>Lua scripting for GTA SA has real limits, and cheating carries real risk. <strong>Using these scripts is not legal action</strong> in the sense that nobody — including me — can guarantee you won't get punished for it. What you do with these files is entirely on you.</p>
+
+                <p>Using <strong>excessive or reckless hacks</strong> can and will get you <strong>banned from the servers you love</strong>. Admins watch for it. Anti-cheat catches the obvious stuff. If a server is your home, don't burn it down for a cheap thrill.</p>
+
+                <p>And honestly — <strong>I don't recommend these scripts if you're in an urge to hack because you suck at the game.</strong> Cheating to feel good about losing is a bad trade. Get better, or play legit. The vault is here for people who want to mess around responsibly, not for people trying to fake skill.</p>
+
+                <p>If you do use them, <strong>keep your settings low</strong> — subtle aim, mild movement, nothing flashy. Loud cheats get caught. Quiet ones don't. That's not a guarantee, it's just how it works.</p>
+
+                <div class="warn-grid">
+                    <div class="cell">
+                        <div class="k">Risk</div>
+                        <div class="v">Excessive hacks = bans on servers you care about.</div>
+                    </div>
+                    <div class="cell">
+                        <div class="k">Not Recommended</div>
+                        <div class="v">If you're cheating out of frustration, skip it.</div>
+                    </div>
+                    <div class="cell">
+                        <div class="k">If You Must</div>
+                        <div class="v">Keep settings low and quiet to avoid detection.</div>
+                    </div>
+                    <div class="cell">
+                        <div class="k">Your Call</div>
+                        <div class="v">Use at your own risk. No refunds for bans.</div>
+                    </div>
+                </div>
+
+                <div class="warn-foot">
+                    <strong>Bottom line:</strong> These are tools, not a cheat code for life. Use them wisely, use them quietly, and don't come crying to me when an admin catches you.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="strip">
+        <div class="marquee">
+            <span>aimbot.lua <b>·</b></span>
+            <span>vehicle_spawn.lua <b>·</b></span>
+            <span>godmode.lua <b>·</b></span>
+            <span>money_drop.lua <b>·</b></span>
+            <span>teleport.lua <b>·</b></span>
+            <span>weapon_pack.lua <b>·</b></span>
+            <span>aimbot.lua <b>·</b></span>
+            <span>vehicle_spawn.lua <b>·</b></span>
+            <span>godmode.lua <b>·</b></span>
+            <span>money_drop.lua <b>·</b></span>
+            <span>teleport.lua <b>·</b></span>
+            <span>weapon_pack.lua <b>·</b></span>
+        </div>
+    </div>
+
+    <section id="vault">
+        <div class="wrap">
+            <div class="sec-head">
+                <h2>The <span>Vault</span></h2>
+                <p>Lua scripts for MoonLoader and CLEO. New drops most weeks.</p>
+            </div>
+
+            <div class="grid">
+                <article class="item">
+                    <div class="top">
+                        <span class="no">No. 001</span>
+                        <span class="file">aimbot.lua</span>
+                    </div>
+                    <h3>Precision Aimbot</h3>
+                    <p>Smooth-target aimbot with FOV control, bone targeting, and a toggle overlay.</p>
+                    <div class="foot">
+                        <span class="price">$7.99</span>
+                        <a href="#" class="get">Get it</a>
+                    </div>
+                </article>
+
+                <article class="item">
+                    <div class="top">
+                        <span class="no">No. 002</span>
+                        <span class="file">vehicle_spawn.lua</span>
+                    </div>
+                    <h3>Vehicle Spawner</h3>
+                    <p>In-game menu to spawn, tune, and save any vehicle in San Andreas instantly.</p>
+                    <div class="foot">
+                        <span class="price">$4.99</span>
+                        <a href="#" class="get">Get it</a>
+                    </div>
+                </article>
+
+                <article class="item">
+                    <div class="top">
+                        <span class="no">No. 003</span>
+                        <span class="file">godmode.lua</span>
+                    </div>
+                    <h3>Godmode Suite</h3>
+                    <p>Invincibility, infinite ammo, no ragdoll, and vehicle godmode — all in one script.</p>
+                    <div class="foot">
+                        <span class="price">$5.99</span>
+                        <a href="#" class="get">Get it</a>
+                    </div>
+                </article>
+
+                <article class="item">
+                    <div class="top">
+                        <span class="no">No. 004</span>
+                        <span class="file">the_wizard_pack.zip</span>
+                    </div>
+                    <h3>The Wizard Pack</h3>
+                    <p>Every cheat script I've released, bundled at one honest price.</p>
+                    <div class="foot">
+                        <span class="price">$34.99</span>
+                        <a href="#" class="get">Get it</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="snippet-section" id="code">
+        <div class="wrap snippet-copy">
+            <div>
+                <h2>Real <span>Lua</span>. No bloat.</h2>
+                <p>You can read the code you're paying for. Every script is clean, commented, and written to be tweaked — not obfuscated into a black box.</p>
+                <p>Drop the <code style="font-family:'JetBrains Mono',monospace;color:#5b8dd6;">.lua</code> into your MoonLoader folder, load it in-game, and it just runs.</p>
+            </div>
+            <div class="snippet">
+                <div class="snippet-bar">
+                    <i></i><i></i><i></i>
+                    <span class="fname">godmode.lua</span>
+                </div>
+                <pre><span class="cm">-- godmode.lua — HarriPotter's Mod Vault</span>
+<span class="kw">local</span> active = <span class="kw">false</span>
+
+<span class="kw">function</span> <span class="fn">main</span>()
+  <span class="kw">while</span> <span class="kw">true</span> <span class="kw">do</span>
+    <span class="kw">if</span> active <span class="kw">then</span>
+      <span class="fn">setCharHealth</span>(<span class="fn">PLAYER_PED</span>, <span class="num">100</span>)
+      <span class="fn">setCharArmor</span>(<span class="fn">PLAYER_PED</span>, <span class="num">100</span>)
+    <span class="kw">end</span>
+    <span class="fn">wait</span>(<span class="num">0</span>)
+  <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="cm">-- toggle with F5</span>
+<span class="fn">onKeyDown</span>(<span class="str">"F5"</span>, <span class="kw">function</span>()
+  active = <span class="kw">not</span> active
+<span class="kw">end</span>)</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== REQUEST A HACK ===== -->
+    <section class="request" id="request">
+        <div class="wrap request-grid">
+            <div class="request-intro">
+                <h2>Request a <span>hack</span>.</h2>
+                <p>Can't find what you're looking for? Tell me what you want and I'll see what I can build. Custom Lua scripts, tweaks to existing ones, or something entirely new — if it's possible in Lua, I'll take a look.</p>
+                <p>Fill out the form and hit send. Your email app will open with everything pre-filled — just hit send and it lands in my inbox.</p>
+                <div class="note">
+                    Currently testing this form — all requests go to:<br>
+                    dragonsden259@gmail.com
+                </div>
+            </div>
+
+            <form class="req-form" id="requestForm" onsubmit="return sendRequest(event)">
+                <div class="form-row">
+                    <div class="field">
+                        <label for="name">Your name</label>
+                        <input type="text" id="name" name="name" placeholder="What should I call you?" required>
+                    </div>
+                    <div class="field">
+                        <label for="email">Your email</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="type">Type of request</label>
+                    <select id="type" name="type">
+                        <option>Custom Lua script</option>
+                        <option>Tweak / edit an existing script</option>
+                        <option>Bundle request</option>
+                        <option>Something else</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="script">What do you want the hack to do?</label>
+                    <textarea id="script" name="script" placeholder="Describe the feature, how it should work, and anything specific you need..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-solid">Send request →</button>
+                <div class="form-note">Opens your email app with the request pre-filled. Nothing is stored on this site.</div>
+            </form>
+        </div>
+    </section>
+
+    <section id="story">
+        <div class="wrap about">
+            <div>
+                <h2>Made by <span>one person</span>, for the players.</h2>
+                <p>I started writing Lua cheats because the ones floating around were unstable, sketchy, or just plain broken. So I built my own — clean, readable, and actually tested.</p>
+                <p>No teams, no resellers, no obfuscated garbage. Just me, a text editor, and a lot of late nights in Los Santos.</p>
+                <div class="signature">— HarriPotter</div>
+            </div>
+            <div class="about-stat">
+                <div class="row">
+                    <div class="num">2,500+</div>
+                    <div class="lbl">Scripts delivered</div>
+                </div>
+                <div class="row">
+                    <div class="num">50</div>
+                    <div class="lbl">Lua files in the vault</div>
+                </div>
+                <div class="row">
+                    <div class="num">100%</div>
+                    <div class="lbl">Tested before release</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-foot" id="contact">
+        <div class="wrap">
+            <div class="foot-top">
+                <div class="foot-brand">
+                    HARRIPOTTER'S <span>MOD VAULT</span>
+                    <small>Lua cheat scripts for GTA San Andreas.</small>
+                </div>
+                <div class="foot-links">
+                    <div>
+                        <div class="h">Store</div>
+                        <a href="#vault">All Scripts</a>
+                        <a href="#">Bundles</a>
+                        <a href="#request">Request a Hack</a>
+                    </div>
+                    <div>
+                        <div class="h">Support</div>
+                        <a href="mailto:dragonsden259@gmail.com">Email Me</a>
+                        <a href="#">Install Guide</a>
+                        <a href="#">Refunds</a>
+                    </div>
+                    <div>
+                        <div class="h">Elsewhere</div>
+                        <a href="#">Discord</a>
+                        <a href="#">YouTube</a>
+                    </div>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>&copy; 2025 HarriPotter's Mod Vault. All rights reserved.</span>
+                <span class="mono">loaded in Los Santos 🎮</span>
+            </div>
+            <div class="foot-disclaimer">
+                Disclaimer: Cheat scripts are provided for educational and private use only. Using them on public servers may violate server rules and result in bans. You are solely responsible for how you use these files. No refunds for bans. Keep settings low to avoid detection.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function sendRequest(e) {
+            e.preventDefault();
+
+            var name    = document.getElementById('name').value;
+            var email   = document.getElementById('email').value;
+            var type    = document.getElementById('type').value;
+            var script  = document.getElementById('script').value;
+
+            var to      = 'dragonsden259@gmail.com';
+            var subject = 'Hack Request — ' + type + ' (' + name + ')';
+            var body =
+                'Name: ' + name + '\n' +
+                'Email: ' + email + '\n' +
+                'Type: ' + type + '\n\n' +
+                'Request:\n' + script;
+
+            var mailto = 'mailto:' + to +
+                '?subject=' + encodeURIComponent(subject) +
+                '&body='    + encodeURIComponent(body);
+
+            window.location.href = mailto;
+            return false;
+        }
+    </script>
+
+</body>
+</html>
